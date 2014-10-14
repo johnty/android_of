@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/red"
+        android:orderInCategory="100"
+        android:title="@string/red"/>
+    <item android:id="@+id/green" android:title="@string/green" android:orderInCategory="101"></item>
+    <item android:id="@+id/blue" android:title="@string/blue" android:orderInCategory="102"></item>
+    <item android:id="@+id/connect" android:title="@string/connect"></item>
+    <item android:id="@+id/reset" android:title="@string/reset"></item>
+
+</menu>
