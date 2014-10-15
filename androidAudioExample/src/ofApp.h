@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxAndroid.h"
+#include "ofxFFTBasic.h"
 #include <map>
 
 class ofApp : public ofxAndroidApp{
@@ -50,4 +51,6 @@ class ofApp : public ofxAndroidApp{
 		float 	phaseAdderTarget;
 
 		ofSoundStream soundStream;
+
+		ofxFftBasic fft;
 };

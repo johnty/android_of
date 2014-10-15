@@ -15,7 +15,9 @@ void ofApp::setup(){
 	lAudio = new float[256];
 	rAudio = new float[256];
 
+	fft.setup(256, OF_FFT_WINDOW_RECTANGULAR);
 	soundStream.setup(this,2,2, sampleRate,256, 4);
+
 }
 
 //--------------------------------------------------------------
@@ -25,12 +27,15 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+
+
 	// draw the left:
 	ofFill();
 	ofSetHexColor(0x333333);
 	ofRect(20,100,256,100);
 	ofRect(20,250,256,100);
-	ofSetHexColor(0xFFFFFF);
+	ofRect(20,400,256,100);
+	ofSetHexColor(0x00FF00);
 	ofNoFill();
 	ofBeginShape();
 	for (int i = 0; i < 256; i++){
@@ -44,7 +49,14 @@ void ofApp::draw(){
 	}
 	ofEndShape(false);
 
-	ofSetHexColor(0x000000);
+	float * fft_real = fft.getReal();
+	ofBeginShape();
+	for (int i = 0; i< fft.getSignalSize()/2; i++) {
+		ofVertex(20+i*2, 450+fft_real[i]*70.0f);
+	}
+	ofEndShape(false);
+
+	ofSetHexColor(0xFF0000);
 
 	ofDrawBitmapString("fps: " + ofToString(ofGetFrameRate()),20,20);
 
@@ -169,5 +181,5 @@ void ofApp::audioReceived(float * input,int bufferSize,int nChannels){
 	for (int i = 0; i < bufferSize; i++){
 		rAudio[i%256] = input[i*nChannels ] + input[i*nChannels +1] ;
 	}
-
+	fft.setSignal(rAudio);
 }

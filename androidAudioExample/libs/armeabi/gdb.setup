@@ -1,6 +1,6 @@
-set solib-search-path /Users/johnty/dev/of_v0.8.4_android_release/examples/android/androidAudioExample/obj/local/armeabi:/Users/johnty/dev/of_v0.8.4_android_release/examples/android/androidAudioExample/libs/armeabi
-directory /Users/johnty/dev/android-ndk-r9b/platforms/android-17/arch-arm/usr/include
-directory /Users/johnty/dev/of_v0.8.4_android_release/examples/android/androidAudioExample/src
-directory /Users/johnty/dev/android-ndk-r9b/sources/cxx-stl/system
-directory /Users/johnty/dev/of_v0.8.4_android_release/examples/android/androidAudioExample/libs/armeabi
+set solib-search-path /Users/johnty/Documents/of_v0.8.4_android_release/examples/android/androidAudioExample/obj/local/armeabi:/Users/johnty/Documents/of_v0.8.4_android_release/examples/android/androidAudioExample/libs/armeabi
+directory /Users/johnty/Documents/android-ndk-r9d/platforms/android-17/arch-arm/usr/include
+directory /Users/johnty/Documents/of_v0.8.4_android_release/examples/android/androidAudioExample/src
+directory /Users/johnty/Documents/android-ndk-r9d/sources/cxx-stl/system
+directory /Users/johnty/Documents/of_v0.8.4_android_release/examples/android/androidAudioExample/libs/armeabi
 
