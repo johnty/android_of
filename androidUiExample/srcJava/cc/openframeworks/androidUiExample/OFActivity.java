@@ -143,7 +143,7 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
     { 
         super.onCreate(savedInstanceState);
         String packageName = getPackageName();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         
         try {
         	midiService = new BluetoothMidiDevice(observer, receiver);

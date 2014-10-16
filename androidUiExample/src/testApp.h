@@ -37,6 +37,8 @@ class testApp : public ofxAndroidApp{
 		string outputstr;
 		int sensorValue;
 
+		ofVideoPlayer player;
+
 		// variable needed for import value from java
 		jclass javaClass;
 		jobject javaObject;

@@ -2,6 +2,7 @@
 #include <jni.h>
 //--------------------------------------------------------------
 void testApp::setup() {
+
 	backColor.set(255, 0, 0);
 	value = 0;
 
@@ -19,59 +20,74 @@ void testApp::setup() {
 	}
 
 	outputstr = "";
+
+	//player.loadMovie("data/hands.mp4");
 }
 
 //--------------------------------------------------------------
 void testApp::update() {
 
+	if (value == 0) {
 
-			if (value == 0) {
+		backColor.set( 128,0, 0);
 
-				backColor.set( 255,0, 0);
+	} else if (value == 1) {
 
-			} else if (value == 1) {
+		backColor.set(0, 128, 0);
 
-				backColor.set(0, 255, 0);
+	} else if (value == 2) {
 
-			} else if (value == 2) {
+		backColor.set(0, 0, 128);
 
-				backColor.set(0, 0, 255);
+	}
+	JNIEnv *env = ofGetJNIEnv();
+	jmethodID javaReturnMethod = env->GetMethodID(javaClass,"returnValue","()F");
+	if(!javaReturnMethod){
+		ofLog() << "javaReturnMethod not found!" << endl;
+	}
+	value=env->CallFloatMethod(javaObject,javaReturnMethod);
+	javaReturnMethod = env->GetMethodID(javaClass,"getRawByteInt", "()I");
+	if(!javaReturnMethod){
+		ofLog() << "javaReturnMethod not found!" << endl;
+		//outputstr += "javaReturnMethod not found!\n"
+	}
+	raw_byte=env->CallCharMethod(javaObject, javaReturnMethod);
 
-			}
-			JNIEnv *env = ofGetJNIEnv();
-			jmethodID javaReturnMethod = env->GetMethodID(javaClass,"returnValue","()F");
-			if(!javaReturnMethod){
-				ofLog() << "javaReturnMethod not found!" << endl;
-			}
-			value=env->CallFloatMethod(javaObject,javaReturnMethod);
-			javaReturnMethod = env->GetMethodID(javaClass,"getRawByteInt", "()I");
-			if(!javaReturnMethod){
-				ofLog() << "javaReturnMethod not found!" << endl;
-				//outputstr += "javaReturnMethod not found!\n"
-			}
-			raw_byte=env->CallCharMethod(javaObject, javaReturnMethod);
+	javaReturnMethod = env->GetMethodID(javaClass,"getLastInt", "()I");
+	if(!javaReturnMethod){
+		ofLog() << "javaReturnMethod not found!" << endl;
+	}
+	sensorValue=env->CallIntMethod(javaObject, javaReturnMethod);
+	/*if (sensorValue != -1) {
+		if (!player.isPlaying()) {
+			player.play();
+		}
+	}
+	if (player.isPlaying()) {
+		player.update();
+	}*/
 
-			javaReturnMethod = env->GetMethodID(javaClass,"getLastInt", "()I");
-						if(!javaReturnMethod){
-							ofLog() << "javaReturnMethod not found!" << endl;
-						}
-			sensorValue=env->CallIntMethod(javaObject, javaReturnMethod);
-
-			//outputstr+=(int)raw_byte+"__";
-			if (raw_byte == 0xff) {
-				//outputstr+="\n";
-			}
-			if (outputstr.length() > 100) {
-				outputstr = "";
-			}
+	//outputstr+=(int)raw_byte+"__";
+	if (raw_byte == 0xff) {
+		//outputstr+="\n";
+	}
+	if (outputstr.length() > 100) {
+		outputstr = "";
+	}
 }
 
 //--------------------------------------------------------------
 void testApp::draw() {
 	ofBackground(backColor);
+	ofSetColor(255,255,255);
 	ofDrawBitmapString(ofToString(ofGetFrameRate(),2),10,10);
 	//ofDrawBitmapString(outputstr, 10, 20);
 	ofDrawBitmapString(ofToString(sensorValue), 10, 40);
+	//player.draw(300,400);
+	ofSetCircleResolution(100);
+	ofFill();
+	ofSetColor(0, sensorValue*2, 255-sensorValue*2);
+	ofCircle(300+(float)sensorValue/2.0f, 300, 100+sensorValue/2);
 }
 
 //--------------------------------------------------------------
