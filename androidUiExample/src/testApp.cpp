@@ -17,6 +17,8 @@ void testApp::setup() {
 	if (!javaObject) {
 		ofLog() << "javaObject not found!" << endl;
 	}
+
+	outputstr = "";
 }
 
 //--------------------------------------------------------------
@@ -37,17 +39,39 @@ void testApp::update() {
 
 			}
 			JNIEnv *env = ofGetJNIEnv();
-					jmethodID javaReturnMethod = env->GetMethodID(javaClass,"returnValue","()F");
-					if(!javaReturnMethod){
-						ofLog() << "javaReturnMethod not found!" << endl;
-					}
-					value=env->CallFloatMethod(javaObject,javaReturnMethod);
+			jmethodID javaReturnMethod = env->GetMethodID(javaClass,"returnValue","()F");
+			if(!javaReturnMethod){
+				ofLog() << "javaReturnMethod not found!" << endl;
+			}
+			value=env->CallFloatMethod(javaObject,javaReturnMethod);
+			javaReturnMethod = env->GetMethodID(javaClass,"getRawByteInt", "()I");
+			if(!javaReturnMethod){
+				ofLog() << "javaReturnMethod not found!" << endl;
+				//outputstr += "javaReturnMethod not found!\n"
+			}
+			raw_byte=env->CallCharMethod(javaObject, javaReturnMethod);
+
+			javaReturnMethod = env->GetMethodID(javaClass,"getLastInt", "()I");
+						if(!javaReturnMethod){
+							ofLog() << "javaReturnMethod not found!" << endl;
+						}
+			sensorValue=env->CallIntMethod(javaObject, javaReturnMethod);
+
+			//outputstr+=(int)raw_byte+"__";
+			if (raw_byte == 0xff) {
+				//outputstr+="\n";
+			}
+			if (outputstr.length() > 100) {
+				outputstr = "";
+			}
 }
 
 //--------------------------------------------------------------
 void testApp::draw() {
-ofBackground(backColor);
-ofDrawBitmapString(ofToString(ofGetFrameRate(),2),10,10);
+	ofBackground(backColor);
+	ofDrawBitmapString(ofToString(ofGetFrameRate(),2),10,10);
+	//ofDrawBitmapString(outputstr, 10, 20);
+	ofDrawBitmapString(ofToString(sensorValue), 10, 40);
 }
 
 //--------------------------------------------------------------

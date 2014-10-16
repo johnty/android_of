@@ -32,7 +32,10 @@ class testApp : public ofxAndroidApp{
 		void cancelPressed();
 
 		float value;
+		char raw_byte;
 		ofColor backColor;
+		string outputstr;
+		int sensorValue;
 
 		// variable needed for import value from java
 		jclass javaClass;

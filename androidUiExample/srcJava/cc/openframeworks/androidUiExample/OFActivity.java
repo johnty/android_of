@@ -2,8 +2,10 @@ package cc.openframeworks.androidUiExample;
 
 import java.io.IOException;
 
+import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -78,63 +80,70 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
 	  //BT Receiver Port
 	
 	  private final MidiReceiver receiver = new MidiReceiver() {
-		  
-		    @Override
-		    public void onNoteOff(int channel, int key, int velocity) {
-		      post("note off: " + channel + ", " + key + ", " + velocity);
-		    }
 
-		    @Override
-		    public void onNoteOn(int channel, int key, int velocity) {
-		      post("note on: " + channel + ", " + key + ", " + velocity);
-		    }
+		  @Override
+		  public void onNoteOff(int channel, int key, int velocity) {
+			  post("note off: " + channel + ", " + key + ", " + velocity);
+		  }
 
-		    @Override
-		    public void onAftertouch(int channel, int velocity) {
-		      post("aftertouch: " + channel + ", " + velocity);
-		    }
+		  @Override
+		  public void onNoteOn(int channel, int key, int velocity) {
+			  post("note on: " + channel + ", " + key + ", " + velocity);
+		  }
 
-		    @Override
-		    public void onControlChange(int channel, int controller, int value) {
-		      post("control change: " + channel + ", " + controller + ", " + value);
-		    }
+		  @Override
+		  public void onAftertouch(int channel, int velocity) {
+			  post("aftertouch: " + channel + ", " + velocity);
+		  }
 
-		    @Override
-		    public void onPitchBend(int channel, int value) {
-		      post("pitch bend: " + channel + ", " + value);
-		    }
+		  @Override
+		  public void onControlChange(int channel, int controller, int value) {
+			  post("control change: " + channel + ", " + controller + ", " + value);
+		  }
 
-		    @Override
-		    public void onPolyAftertouch(int channel, int key, int velocity) {
-		      post("polyphonic aftertouch: " + channel + ", " + key + ", " + velocity);
-		    }
+		  @Override
+		  public void onPitchBend(int channel, int value) {
+			  post("pitch bend: " + channel + ", " + value);
+		  }
 
-		    @Override
-		    public void onProgramChange(int channel, int program) {
-		      post("program change: " + channel + ", " + program);
-		    }
+		  @Override
+		  public void onPolyAftertouch(int channel, int key, int velocity) {
+			  post("polyphonic aftertouch: " + channel + ", " + key + ", " + velocity);
+		  }
 
-		    @Override
-		    public void onRawByte(byte value) {
-		      post("raw byte: " + Integer.toHexString(value));
-		    }
+		  @Override
+		  public void onProgramChange(int channel, int program) {
+			  post("program change: " + channel + ", " + program);
+		  }
 
-		    @Override
-		    public boolean beginBlock() {
-		      return false;
-		    }
+		  @Override
+		  public void onRawByte(byte value) {
+			  if (value == (byte)0xF7 ) { //last value was "data", for the one sensor case
+				  preVal = (int)raw_byte;
+			  }
+			  post("raw byte: " + Integer.toHexString(value));
+			  raw_byte = (char) value;
+		  }
 
-		    @Override
-		    public void endBlock() {}
-		  };
-		  
+		  @Override
+		  public boolean beginBlock() {
+			  return false;
+		  }
+
+		  @Override
+		  public void endBlock() {}
+	  };
+
 	
 	public float value=0;
+	public char raw_byte=0;
+	public int preVal = -1;
 	@Override
     public void onCreate(Bundle savedInstanceState)
     { 
         super.onCreate(savedInstanceState);
         String packageName = getPackageName();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         
         try {
         	midiService = new BluetoothMidiDevice(observer, receiver);
@@ -241,7 +250,32 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
               }
     		return true;
     	case R.id.reset:
+    		Log.v("BT:", "switching to host mode and turning on s1");
+    		//byte data[] = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x22, (byte) 0xF7 };
+    		//host mode
+    		byte data[] = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x5A, (byte) 0x00, (byte) 0xF7 };
+    		midiService.getMidiOut().beginBlock();
+
+    		for (int i=0; i<data.length; i++) {
+    			midiService.getMidiOut().onRawByte(data[i]);
+    		}
+    		midiService.getMidiOut().endBlock();
+    		//set interval to 50ms
+    		data = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x03, (byte) 0x00,(byte) 0x32, (byte) 0xF7 };
+    		midiService.getMidiOut().beginBlock();
+    		for (int i=0; i<data.length; i++) {
+    			midiService.getMidiOut().onRawByte(data[i]);
+    		}
+    		midiService.getMidiOut().endBlock();
+    		//start stream port 0 (0x40 == on, port 0)
+    		data = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x01, (byte) 0x40, (byte) 0xF7 };
+    		midiService.getMidiOut().beginBlock();
+    		for (int i=0; i<data.length; i++) {
+    			midiService.getMidiOut().onRawByte(data[i]);
+    		}
+    		midiService.getMidiOut().endBlock();
     		return true;
+    		
     	}
     	return super.onOptionsItemSelected(item);
     }
@@ -258,11 +292,35 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
     	float floatValue=value;
     	return floatValue;
     }
+    public int getRawByteInt() {
+    	int charValue= (int)raw_byte;
+    	return charValue;
+    }
+    public int getLastInt() {
+    	int intVal = preVal;
+    	return intVal;
+    }
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case CONNECT:
+			if (resultCode == Activity.RESULT_OK) {
+				String address = data.getExtras().getString(DeviceListActivity.DEVICE_ADDRESS);
+				try {
+					midiService.connect(address);
+				} catch (IOException e) {
+					toast(e.getMessage());
+				}
+	        }
+	        break;
+	        }
 	}
    
 	
