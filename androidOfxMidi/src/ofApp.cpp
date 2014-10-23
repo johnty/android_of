@@ -109,6 +109,12 @@ void ofApp::onCustom() {
 
 void ofApp::onArray(char* data, int len) {
 	output_msg+="onArray: size = " + ofToString(len)+ "\n"; // len = " + ofToString(len) + "\n";
+	output_msg+="array contents = ";
+	for (int i=0; i<len; i++) {
+		output_msg+= ofToString((int)data[i])+"; ";
+	}
+	output_msg+="\n";
+
 }
 
 

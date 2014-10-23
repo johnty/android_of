@@ -97,7 +97,7 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 			t.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
 			t.show();
     	}
-    	byte data[] = new byte[] { (byte) 0xF0, (byte) 0x7F };
+    	byte data[] = new byte[] { (byte) 0xF0, (byte) 0xFF, (byte)0x0A};
     	OFAndroid.passArray(data);
     	OFAndroid.onCustom();
     	OFAndroid.passInt(clickCount);
