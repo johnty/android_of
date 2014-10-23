@@ -24,6 +24,8 @@ import com.noisepages.nettoyeur.bluetooth.BluetoothSppConnection;
 import com.noisepages.nettoyeur.bluetooth.BluetoothSppObserver;
 import com.noisepages.nettoyeur.bluetooth.midi.BluetoothMidiDevice;
 import com.noisepages.nettoyeur.midi.MidiReceiver;
+import com.noisepages.nettoyeur.midi.util.SystemMessageDecoder;
+import com.noisepages.nettoyeur.midi.util.SystemMessageReceiver;
 
 
 public class OFActivity extends cc.openframeworks.OFActivity implements OnClickListener {
@@ -37,6 +39,7 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
 	private Toast toast = null;
 	
 	private BluetoothMidiDevice midiService = null;
+	private SystemMessageDecoder midiSysDecoder;
 	
 	static void post(String msg) {
 		Log.v("BT", msg);
@@ -76,6 +79,82 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
 
 	  };
 	  
+	  //sys ex receiver
+	  
+	  private final SystemMessageReceiver midiSysExReceiver = new SystemMessageReceiver() {
+
+			@Override
+			public void onSystemExclusive(byte[] sysex) {
+				// TODO Auto-generated method stub
+				StringBuilder sb = new StringBuilder();
+			    for (byte b : sysex) {
+			        sb.append(String.format("%02X ", b));
+			    }
+				post("sysex: " + sb);
+				//Log.v("USBMIDI", "sysex");
+			}
+
+			@Override
+			public void onTimeCode(int value) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onSongPosition(int pointer) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onSongSelect(int index) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTuneRequest() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTimingClock() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onStart() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onContinue() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onStop() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onActiveSensing() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onSystemReset() {
+				// TODO Auto-generated method stub
+
+			}
+
+		};
 	  
 	  //BT Receiver Port
 	
@@ -118,10 +197,13 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
 
 		  @Override
 		  public void onRawByte(byte value) {
+			  if (midiSysDecoder != null) {
+				  midiSysDecoder.decodeByte(value);
+			  }
 			  if (value == (byte)0xF7 ) { //last value was "data", for the one sensor case
 				  preVal = (int)raw_byte;
 			  }
-			  post("raw byte: " + Integer.toHexString(value));
+			  //post("raw byte: " + Integer.toHexString(value));
 			  raw_byte = (char) value;
 		  }
 
@@ -152,6 +234,7 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
         	toast("MIDI not available!");
         	finish();
         }
+        midiSysDecoder = new SystemMessageDecoder(midiSysExReceiver);
 
         ofApp = new OFAndroid(packageName,this);
         
