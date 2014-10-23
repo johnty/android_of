@@ -1,6 +1,7 @@
 package cc.openframeworks.androidOfxMidi;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,6 +11,8 @@ import cc.openframeworks.OFAndroid;
 
 
 public class OFActivity extends cc.openframeworks.OFActivity{
+	
+	private int clickCount = 0;
 
 	@Override
     public void onCreate(Bundle savedInstanceState)
@@ -76,8 +79,12 @@ public class OFActivity extends cc.openframeworks.OFActivity{
     	
     	//handle within java
 		if (item.getItemId() == R.id.menu_test) {
-			Toast t = Toast.makeText(getApplicationContext(), "test selected", Toast.LENGTH_SHORT);
+			clickCount++;
+			String msg = "click count = " + clickCount;
+			Toast t = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
 			t.show();
+			
 		}
     	
 		//give oF a chance
@@ -85,8 +92,14 @@ public class OFActivity extends cc.openframeworks.OFActivity{
     	// you can add additional behavior from java modifying this method
     	// but keep the call to OFAndroid so OF is notified of menu events
     	if(OFAndroid.menuItemSelected(item.getItemId())) {
-    		
+    		String msg = "back from C++ code!";
+			Toast t = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+			t.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
+			t.show();
     	}
+    	OFAndroid.passArray(null);
+    	OFAndroid.onCustom();
+    	OFAndroid.passInt(clickCount);
     	
     	return super.onOptionsItemSelected(item);
     }

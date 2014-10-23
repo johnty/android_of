@@ -23,7 +23,7 @@ class ofApp : public ofxAndroidApp{
 		void touchCancelled(int x, int y, int id);
 		void swipe(ofxAndroidSwipeDir swipeDir, int id);
 
-		bool onMenuItemSelected(string menu_id);
+		bool menuItemSelected(char* menu_id);
 
 		void pause();
 		void stop();
@@ -33,6 +33,10 @@ class ofApp : public ofxAndroidApp{
 		bool backPressed();
 		void okPressed();
 		void cancelPressed();
+
+		void onCustom();
+		void onArray(char* data, int len);
+		void onInt(int i);
 
 		string output_msg;
 };

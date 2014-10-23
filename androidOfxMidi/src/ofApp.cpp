@@ -35,7 +35,7 @@ void ofApp::windowResized(int w, int h){
 
 //--------------------------------------------------------------
 void ofApp::touchDown(int x, int y, int id){
-
+	output_msg += ofToString(x)+":"+ofToString(y)+"\n";
 }
 
 //--------------------------------------------------------------
@@ -63,13 +63,14 @@ void ofApp::swipe(ofxAndroidSwipeDir swipeDir, int id){
 	output_msg+= "sw! \n";
 }
 
-bool ofApp::onMenuItemSelected(string menu_id) {
-	output_msg += menu_id + "..";
+bool ofApp::menuItemSelected(char* menu_id) {
+	output_msg += "onMenu....\n";
+	return true;
 }
 
 //--------------------------------------------------------------
 void ofApp::pause(){
-
+	output_msg +="pause\n";
 }
 
 //--------------------------------------------------------------
@@ -79,7 +80,7 @@ void ofApp::stop(){
 
 //--------------------------------------------------------------
 void ofApp::resume(){
-
+	output_msg +="resume\n";
 }
 
 //--------------------------------------------------------------
@@ -100,4 +101,17 @@ void ofApp::okPressed(){
 //--------------------------------------------------------------
 void ofApp::cancelPressed(){
 
+}
+
+void ofApp::onCustom() {
+	output_msg+="onCustom\n";
+}
+
+void ofApp::onArray(char* data, int len) {
+	output_msg+="onArray: size = " + ofToString(len)+ "\n"; // len = " + ofToString(len) + "\n";
+}
+
+
+void ofApp::onInt(int i) {
+	output_msg+="i= " + ofToString(i) + "!\n";
 }
