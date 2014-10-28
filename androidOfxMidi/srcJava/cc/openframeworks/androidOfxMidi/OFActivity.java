@@ -1,6 +1,9 @@
 package cc.openframeworks.androidOfxMidi;
 
+import java.util.Random;
+
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -13,6 +16,31 @@ import cc.openframeworks.OFAndroid;
 public class OFActivity extends cc.openframeworks.OFActivity{
 	
 	private int clickCount = 0;
+	private Handler handler = new Handler();
+	private final int SAMPLE_INTERVAL_MS = 5; // in ms
+	private final int SAMPLE_DATA_SIZE = 8; //number of bytes in dummy data
+	
+	private Runnable runnable = new Runnable() {
+		//this class deals with generating periodic events,
+		// to emulate the incoming "midi messages" from device
+		// at a given rate
+		@Override
+		public void run() {
+			Random r = new Random();
+			byte r_b = (byte) r.nextInt(127);
+			byte data[] = new byte[SAMPLE_DATA_SIZE];
+			for (int i=0; i<SAMPLE_DATA_SIZE-1; i++) {
+				data[i] = (byte) (0xFF - i);
+			}
+			data[SAMPLE_DATA_SIZE-1] = r_b; //append random byte at end.
+			OFAndroid.passArray(data);
+			if (clickCount % 2 == 1) {
+				//repeat if we have odd clickcount
+				// silly way to trigger emulation of data streaming...
+				handler.postDelayed(runnable, SAMPLE_INTERVAL_MS);
+			}
+		}
+	};
 
 	@Override
     public void onCreate(Bundle savedInstanceState)
@@ -21,6 +49,7 @@ public class OFActivity extends cc.openframeworks.OFActivity{
         String packageName = getPackageName();
 
         ofApp = new OFAndroid(packageName,this);
+        
     }
 	
 	@Override
@@ -98,9 +127,13 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 			t.show();
     	}
     	byte data[] = new byte[] { (byte) 0xF0, (byte) 0xFF, (byte)0x0A};
+    	data[2]+=clickCount;
     	OFAndroid.passArray(data);
     	OFAndroid.onCustom();
     	OFAndroid.passInt(clickCount);
+    	if (clickCount % 2 == 1) {
+    		handler.postDelayed(runnable, SAMPLE_INTERVAL_MS);
+    	}
     	
     	return super.onOptionsItemSelected(item);
     }

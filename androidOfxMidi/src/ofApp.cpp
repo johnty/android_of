@@ -7,7 +7,9 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+	if (output_msg.length() > 500) {
+		output_msg = "";
+	}
 }
 
 //--------------------------------------------------------------
@@ -15,6 +17,8 @@ void ofApp::draw(){
 	ofBackground(255,0,255);
 	ofDrawBitmapString("Hello World\n Hello world", 25, 25);
 	ofDrawBitmapString(output_msg, 25, 55);
+	float fr = ofGetFrameRate();
+	ofDrawBitmapString(ofToString(fr), 145, 25);
 
 }
 
@@ -40,7 +44,7 @@ void ofApp::touchDown(int x, int y, int id){
 
 //--------------------------------------------------------------
 void ofApp::touchMoved(int x, int y, int id){
-
+	output_msg += ofToString(x)+":"+ofToString(y)+"\n";
 }
 
 //--------------------------------------------------------------
