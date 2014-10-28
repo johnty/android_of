@@ -2,20 +2,45 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	output_msg = "";
+	output_msg = last_locked ="";
+	lockedout = false;
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if (output_msg.length() > 500) {
+
+	if (mylock.tryLock()) {
+		last_count = jni_count;
+		mylock.unlock();
+		lockedout = false;
+	}
+	else {
+		lockedout = true;
+		last_locked = "locked@ " + ofToString(last_count);
+	}
+
+	output_msg = "jni calls = " + ofToString(last_count);
+	output_msg += ";   call period(ms) = " + ofToString(ofGetElapsedTimeMillis()/(float)last_count) + "\n data = ";
+
+	for (int i=0; i<data_len; i++) {
+		output_msg += ofToString((int)recv_data[i])+ " | ";
+	}
+	output_msg+= "\n";
+
+	if (output_msg.length() > 1000) {
 		output_msg = "";
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofBackground(255,0,255);
-	ofDrawBitmapString("Hello World\n Hello world", 25, 25);
+	if (lockedout)
+		ofBackground(255,0,0);
+	else
+		ofBackground(255,0,255);
+	//ofDrawBitmapString("Hello World\n Hello world", 25, 25);
+	ofDrawBitmapString(last_locked, 25, 25);
+	//output_msg = "jni calls = " + ofToString(jni_count);
 	ofDrawBitmapString(output_msg, 25, 55);
 	float fr = ofGetFrameRate();
 	ofDrawBitmapString(ofToString(fr), 145, 25);
@@ -108,20 +133,29 @@ void ofApp::cancelPressed(){
 }
 
 void ofApp::onCustom() {
-	output_msg+="onCustom\n";
+	//output_msg+="onCustom\n";
+	jni_count++;
 }
 
 void ofApp::onArray(char* data, int len) {
-	output_msg+="onArray: size = " + ofToString(len)+ "\n"; // len = " + ofToString(len) + "\n";
-	output_msg+="array contents = ";
-	for (int i=0; i<len; i++) {
-		output_msg+= ofToString((int)data[i])+"; ";
-	}
-	output_msg+="\n";
+	//output_msg+="onArray: size = " + ofToString(len)+ "\n"; // len = " + ofToString(len) + "\n";
+	//output_msg+="array contents = ";
+	data_len = len;
+	mylock.lock();
+	if (recv_data != NULL)
+		delete recv_data;
+	recv_data = new char[data_len];
+	memcpy(recv_data, data, len);
+	//output_msg+="\n";
+	jni_count++;
+	mylock.unlock();
 
 }
 
 
 void ofApp::onInt(int i) {
-	output_msg+="i= " + ofToString(i) + "!\n";
+
+	mylock.lock();
+	jni_count = i;
+	mylock.unlock();
 }

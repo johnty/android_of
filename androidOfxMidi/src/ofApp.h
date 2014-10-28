@@ -39,4 +39,14 @@ class ofApp : public ofxAndroidApp{
 		void onInt(int i);
 
 		string output_msg;
+		string last_locked;
+		unsigned long int jni_count;
+		char* recv_data;
+		int data_len;
+
+		long last_count;
+
+		ofMutex mylock;
+
+		bool lockedout;
 };

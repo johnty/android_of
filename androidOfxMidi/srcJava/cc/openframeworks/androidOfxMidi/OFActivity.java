@@ -4,6 +4,7 @@ import java.util.Random;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -15,7 +16,8 @@ import cc.openframeworks.OFAndroid;
 
 public class OFActivity extends cc.openframeworks.OFActivity{
 	
-	private int clickCount = 0;
+	private long jni_calls = 0;
+	private int clickCount = 1;
 	private Handler handler = new Handler();
 	private final int SAMPLE_INTERVAL_MS = 5; // in ms
 	private final int SAMPLE_DATA_SIZE = 8; //number of bytes in dummy data
@@ -33,11 +35,21 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 				data[i] = (byte) (0xFF - i);
 			}
 			data[SAMPLE_DATA_SIZE-1] = r_b; //append random byte at end.
+			//OFAndroid.onCustom();
 			OFAndroid.passArray(data);
+			//OFAndroid.passInt((int) jni_calls);
+			jni_calls++;
 			if (clickCount % 2 == 1) {
 				//repeat if we have odd clickcount
 				// silly way to trigger emulation of data streaming...
 				handler.postDelayed(runnable, SAMPLE_INTERVAL_MS);
+			}
+			if (jni_calls % 1000 == 0) {
+				String msg = "JniCnt=" + jni_calls;
+				Toast t = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+				t.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
+				t.show();
+				Log.v("JNI_CNT", msg);
 			}
 		}
 	};
@@ -49,6 +61,9 @@ public class OFActivity extends cc.openframeworks.OFActivity{
         String packageName = getPackageName();
 
         ofApp = new OFAndroid(packageName,this);
+        
+        //start sending immediately:
+        handler.postDelayed(runnable, SAMPLE_INTERVAL_MS);
         
     }
 	
