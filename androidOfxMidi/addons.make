@@ -1,3 +1,5 @@
 ofxAndroid
 ofxAccelerometer
 ofxXmlSettings
+ofxICubeX
+ofxMidi

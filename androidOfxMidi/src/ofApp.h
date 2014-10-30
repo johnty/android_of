@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxAndroid.h"
 #include "ofxXmlSettings.h"
+#include "ofxICubeX.h"
 
 class ofApp : public ofxAndroidApp{
 	
@@ -49,4 +50,6 @@ class ofApp : public ofxAndroidApp{
 		ofMutex mylock;
 
 		bool lockedout;
+
+		ofxICubeX myICube;
 };

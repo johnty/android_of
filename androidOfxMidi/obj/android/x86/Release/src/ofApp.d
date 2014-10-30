@@ -187,7 +187,22 @@ obj/android/x86/Release/src/ofApp.o: src/ofApp.cpp src/ofApp.h \
  ../../..//addons/ofxAndroid/src/ofxAndroidApp.h \
  ../../..//addons/ofxAndroid/src/ofxAndroidUtils.h \
  ../../..//addons/ofxXmlSettings/src/ofxXmlSettings.h \
- ../../..//addons/ofxXmlSettings/libs/tinyxml.h
+ ../../..//addons/ofxXmlSettings/libs/tinyxml.h \
+ ../../..//addons/ofxICubeX/src/ofxICubeX.h \
+ ../../..//addons/ofxICubeX/libs/ICubeXInterface/ICubeXInteface.h \
+ ../../..//addons/ofxICubeX/libs/ICubeXInterface/ICubeXSysExTranslator.h \
+ ../../..//addons/ofxICubeX/libs/ICubeXInterface/ICubeXDigitizerState.h \
+ ../../..//addons/ofxMidi/src/ofxMidi.h \
+ ../../..//addons/ofxMidi/src/ofxMidiIn.h \
+ ../../..//addons/ofxMidi/src/ofxBaseMidi.h \
+ ../../..//addons/ofxMidi/src/ofxMidiConstants.h \
+ ../../..//addons/ofxMidi/src/ofxMidiMessage.h \
+ ../../..//addons/ofxMidi/src/ofxMidiTypes.h \
+ ../../..//addons/ofxMidi/src/desktop/ofxRtMidiIn.h \
+ ../../..//addons/ofxMidi/libs/rtmidi/RtMidi.h \
+ ../../..//addons/ofxMidi/libs/rtmidi/RtError.h \
+ ../../..//addons/ofxMidi/src/ofxMidiOut.h \
+ ../../..//addons/ofxMidi/src/desktop/ofxRtMidiOut.h
 
 src/ofApp.h:
 
@@ -568,3 +583,33 @@ src/ofApp.h:
 ../../..//addons/ofxXmlSettings/src/ofxXmlSettings.h:
 
 ../../..//addons/ofxXmlSettings/libs/tinyxml.h:
+
+../../..//addons/ofxICubeX/src/ofxICubeX.h:
+
+../../..//addons/ofxICubeX/libs/ICubeXInterface/ICubeXInteface.h:
+
+../../..//addons/ofxICubeX/libs/ICubeXInterface/ICubeXSysExTranslator.h:
+
+../../..//addons/ofxICubeX/libs/ICubeXInterface/ICubeXDigitizerState.h:
+
+../../..//addons/ofxMidi/src/ofxMidi.h:
+
+../../..//addons/ofxMidi/src/ofxMidiIn.h:
+
+../../..//addons/ofxMidi/src/ofxBaseMidi.h:
+
+../../..//addons/ofxMidi/src/ofxMidiConstants.h:
+
+../../..//addons/ofxMidi/src/ofxMidiMessage.h:
+
+../../..//addons/ofxMidi/src/ofxMidiTypes.h:
+
+../../..//addons/ofxMidi/src/desktop/ofxRtMidiIn.h:
+
+../../..//addons/ofxMidi/libs/rtmidi/RtMidi.h:
+
+../../..//addons/ofxMidi/libs/rtmidi/RtError.h:
+
+../../..//addons/ofxMidi/src/ofxMidiOut.h:
+
+../../..//addons/ofxMidi/src/desktop/ofxRtMidiOut.h:

@@ -25,11 +25,13 @@ void ofApp::update(){
 	for (int i=0; i<data_len; i++) {
 		output_msg += ofToString((int)recv_data[i])+ " | ";
 	}
-	output_msg+= "\n";
-
-	if (output_msg.length() > 1000) {
-		output_msg = "";
+	output_msg+= "\n Sensor Data: ";
+	for (int i=0; i<kNUM_ICUBEX_SENSORS; i++) {
+		output_msg += ofToString(myICube.getSensorData(i)) + " ";
 	}
+
+
+
 }
 
 //--------------------------------------------------------------
@@ -149,6 +151,7 @@ void ofApp::onArray(char* data, int len) {
 	//output_msg+="\n";
 	jni_count++;
 	mylock.unlock();
+	myICube.newMidiMessage(data, len);
 
 }
 

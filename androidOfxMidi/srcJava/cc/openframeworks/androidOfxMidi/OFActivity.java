@@ -19,7 +19,7 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 	private long jni_calls = 0;
 	private int clickCount = 1;
 	private Handler handler = new Handler();
-	private final int SAMPLE_INTERVAL_MS = 5; // in ms
+	private final int SAMPLE_INTERVAL_MS = 25; // in ms
 	private final int SAMPLE_DATA_SIZE = 8; //number of bytes in dummy data
 	
 	private Runnable runnable = new Runnable() {
@@ -30,11 +30,22 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 		public void run() {
 			Random r = new Random();
 			byte r_b = (byte) r.nextInt(127);
+			/*
 			byte data[] = new byte[SAMPLE_DATA_SIZE];
 			for (int i=0; i<SAMPLE_DATA_SIZE-1; i++) {
 				data[i] = (byte) (0xFF - i);
 			}
 			data[SAMPLE_DATA_SIZE-1] = r_b; //append random byte at end.
+			data[2]+=clickCount;
+			*/
+			
+			//what looks like sensor data here:
+			// sensor 0, value = random (0-127)
+			byte data[] = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte)0x00,
+										(byte) 0x00, (byte) r_b, (byte) 0xF7};
+	    	OFAndroid.passArray(data);
+			
+			
 			//OFAndroid.onCustom();
 			OFAndroid.passArray(data);
 			//OFAndroid.passInt((int) jni_calls);
@@ -62,8 +73,14 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 
         ofApp = new OFAndroid(packageName,this);
         
+        //we send dummy data to make interface think sensor 0 is on:
+        
+        byte data[] = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte)0x00,
+				(byte) 0x01, (byte) 0x40, (byte) 0xF7};
+        OFAndroid.passArray(data);
+        
         //start sending immediately:
-        handler.postDelayed(runnable, SAMPLE_INTERVAL_MS);
+        //handler.postDelayed(runnable, SAMPLE_INTERVAL_MS);
         
     }
 	
@@ -130,6 +147,13 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 			t.show();
 			
 		}
+		if (item.getItemId() == R.id.menu_settings) {
+			// use this to send an stream echo message
+			 byte data[] = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte)0x00,
+						(byte) 0x01, (byte) 0x40, (byte) 0xF7};
+		     OFAndroid.passArray(data);
+		     Log.v("OFActivity", "sending stream echo for sensor 0");
+		}
     	
 		//give oF a chance
     	// This passes the menu option string to OF
@@ -141,9 +165,9 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 			t.setGravity(Gravity.TOP|Gravity.CENTER, 0, 0);
 			t.show();
     	}
-    	byte data[] = new byte[] { (byte) 0xF0, (byte) 0xFF, (byte)0x0A};
-    	data[2]+=clickCount;
-    	OFAndroid.passArray(data);
+    	//byte data[] = new byte[] { (byte) 0xF0, (byte) 0xFF, (byte)0x0A};
+    	//data[2]+=clickCount;
+    	//OFAndroid.passArray(data);
     	OFAndroid.onCustom();
     	OFAndroid.passInt(clickCount);
     	if (clickCount % 2 == 1) {
