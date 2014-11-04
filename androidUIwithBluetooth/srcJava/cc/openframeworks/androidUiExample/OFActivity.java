@@ -401,9 +401,9 @@ public class OFActivity extends cc.openframeworks.OFActivity implements OnClickL
 				} catch (IOException e) {
 					toast(e.getMessage());
 				}
-	        }
-	        break;
-	        }
+			}
+			break;
+		}
 	}
    
 	

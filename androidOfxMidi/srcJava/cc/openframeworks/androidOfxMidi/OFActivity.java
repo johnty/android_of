@@ -127,7 +127,7 @@ public class OFActivity extends cc.openframeworks.OFActivity{
     // http://developer.android.com/guide/topics/ui/menus.html
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	// Create settings menu options from here, one by one or infalting an xml
+    	// Create settings menu options from here, one by one or inflating an xml
     	MenuInflater inflator = getMenuInflater();
     	inflator.inflate(R.menu.main_layout, menu);
         return super.onCreateOptionsMenu(menu);
@@ -136,8 +136,6 @@ public class OFActivity extends cc.openframeworks.OFActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-    	
-    	
     	//handle within java
 		if (item.getItemId() == R.id.menu_test) {
 			clickCount++;
