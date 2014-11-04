@@ -191,6 +191,22 @@ public class OFActivity extends cc.openframeworks.OFActivity{
     		myBtMidi.getMidiOut().endBlock();
 			
 			post("sending stream echo for sensor 0");
+			
+			//set interval to 50ms
+			sysex_cmd = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x03, (byte) 0x00,(byte) 0x32, (byte) 0xF7 };
+    		myBtMidi.getMidiOut().beginBlock();
+    		for (int i=0; i<sysex_cmd.length; i++) {
+    			myBtMidi.getMidiOut().onRawByte(sysex_cmd[i]);
+    		}
+    		myBtMidi.getMidiOut().endBlock();
+    		//start stream port 0 (0x40 == on, port 0)
+    		sysex_cmd = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x01, (byte) 0x40, (byte) 0xF7 };
+    		myBtMidi.getMidiOut().beginBlock();
+    		for (int i=0; i<sysex_cmd.length; i++) {
+    			myBtMidi.getMidiOut().onRawByte(sysex_cmd[i]);
+    		}
+    		myBtMidi.getMidiOut().endBlock();
+			
 		}
 
 		//give oF a chance
@@ -269,7 +285,7 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 			    for (byte b : sysex) {
 			        sb.append(String.format("%02X ", b));
 			    }
-				post("sysex: " + sb);
+				Log.v("sysex: ", sb.toString());
 				//Log.v("USBMIDI", "sysex");
 			}
 
@@ -368,8 +384,8 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 			public void onRawByte(byte value) {
 				if (mySysExDecoder != null) {
 					mySysExDecoder.decodeByte(value);
-					Integer v = (int)value;
-					Log.v("rawbyte", v.toString());
+					//Integer v = (int)value;
+					//Log.v("rawbyte", v.toString());
 				}
 			}
 
