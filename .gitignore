@@ -14,7 +14,7 @@ tmp/
 local.properties
 .settings/
 .loadpath
-
+!*.xml
 # android autogen resource bundle
 **/raw/
 

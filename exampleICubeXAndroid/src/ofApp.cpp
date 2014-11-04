@@ -5,14 +5,54 @@ void ofApp::setup(){
 	output_msg = last_locked ="";
 	lockedout = false;
 
-	myVidPlayer.loadMovie("hands.mp4");
-	myVidPlayer.play();
+	myVidPlayer1.loadMovie("hands.mp4");
+	myVidPlayer1.setLoopState(OF_LOOP_NORMAL);
+
+	myVidPlayer2.loadMovie("vid2.mp4");
+	myVidPlayer1.setLoopState(OF_LOOP_NORMAL);
+
+	myVidPlayer1.play();
+	myVidPlayer1.setPaused(true);
+	myVidPlayer2.play();
+	myVidPlayer2.setPaused(true);
+
+	curr_state = 0;
+	prev_state = 0;
+	sensor_val = 0;
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
-	myVidPlayer.update();
+	myVidPlayer1.update();
+	myVidPlayer2.update();
+
+	if (myICube.getSensorData(7) != -1 ) {
+		//update state depending on sensor value
+		if (myICube.getSensorData(7) < 127/2) {
+			curr_state = 1;
+		}
+		else {
+			curr_state = 2;
+		}
+		//we have a transition...
+		if (curr_state != prev_state) {
+
+			if (curr_state == 1) {
+				myVidPlayer2.setPaused(true);
+				myVidPlayer1.setPaused(false);
+
+			}
+			else {
+				myVidPlayer1.setPaused(true);
+				myVidPlayer2.setPaused(false);
+			}
+			//update prev
+			prev_state = curr_state;
+		}
+	}
+
 	if (mylock.tryLock()) {
 		last_count = jni_count;
 		mylock.unlock();
@@ -51,7 +91,10 @@ void ofApp::draw(){
 	float fr = ofGetFrameRate();
 	ofDrawBitmapString(ofToString(fr), 145, 25);
 
-	myVidPlayer.draw(25, 300);
+	if (curr_state == 1)
+		myVidPlayer1.draw(425, 100);
+	if (curr_state == 2)
+		myVidPlayer2.draw(25, 300);
 }
 
 //--------------------------------------------------------------

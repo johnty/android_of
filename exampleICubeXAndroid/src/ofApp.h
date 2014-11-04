@@ -53,5 +53,11 @@ class ofApp : public ofxAndroidApp{
 
 		ofxICubeX myICube;
 
-		ofVideoPlayer myVidPlayer;
+		ofVideoPlayer myVidPlayer1;
+		ofVideoPlayer myVidPlayer2;
+
+		int curr_state;
+		int prev_state;
+
+		int sensor_val;
 };
