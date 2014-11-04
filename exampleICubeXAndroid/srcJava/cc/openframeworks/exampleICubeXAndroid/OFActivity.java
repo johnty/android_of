@@ -110,9 +110,10 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 
 		//we send dummy data to make interface think sensor 0 is on:
 		//TODO: will be replaced with actual sysex message!
-		byte data[] = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte)0x00,
-				(byte) 0x01, (byte) 0x40, (byte) 0xF7};
-		OFAndroid.passArray(data);
+        //PORT IS NOT OPEN YET!!!
+		//byte data[] = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte)0x00,
+		//		(byte) 0x01, (byte) 0x40, (byte) 0xF7};
+		//OFAndroid.passArray(data);
 
 	}
 
@@ -285,7 +286,9 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 			    for (byte b : sysex) {
 			        sb.append(String.format("%02X ", b));
 			    }
-				Log.v("sysex: ", sb.toString());
+				//Log.v("sysex: ", sb.toString());
+				
+				OFAndroid.passArray(sysex);
 				//Log.v("USBMIDI", "sysex");
 			}
 

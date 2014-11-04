@@ -151,7 +151,7 @@ void ofApp::onArray(char* data, int len) {
 	//output_msg+="\n";
 	jni_count++;
 	mylock.unlock();
-	myICube.newMidiMessage(data, len);
+	myICube.newSysExStrippedData(data, len);
 
 }
 
