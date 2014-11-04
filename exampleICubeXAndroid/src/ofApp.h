@@ -52,4 +52,6 @@ class ofApp : public ofxAndroidApp{
 		bool lockedout;
 
 		ofxICubeX myICube;
+
+		ofVideoPlayer myVidPlayer;
 };

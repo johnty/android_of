@@ -4,11 +4,15 @@
 void ofApp::setup(){
 	output_msg = last_locked ="";
 	lockedout = false;
+
+	myVidPlayer.loadMovie("hands.mp4");
+	myVidPlayer.play();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
+	myVidPlayer.update();
 	if (mylock.tryLock()) {
 		last_count = jni_count;
 		mylock.unlock();
@@ -47,6 +51,7 @@ void ofApp::draw(){
 	float fr = ofGetFrameRate();
 	ofDrawBitmapString(ofToString(fr), 145, 25);
 
+	myVidPlayer.draw(25, 300);
 }
 
 //--------------------------------------------------------------

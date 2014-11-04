@@ -123,6 +123,8 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 
 	@Override
 	protected void onPause() {
+		if (myBtMidi != null)
+			myBtMidi.close();
 		super.onPause();
 		ofApp.pause();
 	}
@@ -193,8 +195,8 @@ public class OFActivity extends cc.openframeworks.OFActivity{
 			
 			post("sending stream echo for sensor 0");
 			
-			//set interval to 50ms
-			sysex_cmd = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x03, (byte) 0x00,(byte) 0x32, (byte) 0xF7 };
+			//set interval to 20 (0x14) ms
+			sysex_cmd = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x03, (byte) 0x00,(byte) 0x14, (byte) 0xF7 };
     		myBtMidi.getMidiOut().beginBlock();
     		for (int i=0; i<sysex_cmd.length; i++) {
     			myBtMidi.getMidiOut().onRawByte(sysex_cmd[i]);
@@ -202,6 +204,14 @@ public class OFActivity extends cc.openframeworks.OFActivity{
     		myBtMidi.getMidiOut().endBlock();
     		//start stream port 0 (0x40 == on, port 0)
     		sysex_cmd = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x01, (byte) 0x40, (byte) 0xF7 };
+    		myBtMidi.getMidiOut().beginBlock();
+    		for (int i=0; i<sysex_cmd.length; i++) {
+    			myBtMidi.getMidiOut().onRawByte(sysex_cmd[i]);
+    		}
+    		myBtMidi.getMidiOut().endBlock();
+    		    		
+    		//start stream port 7 (0x47 == on, port 7)
+    		sysex_cmd = new byte[] { (byte) 0xF0, (byte) 0x7D, (byte) 0x00, (byte) 0x01, (byte) 0x47, (byte) 0xF7 };
     		myBtMidi.getMidiOut().beginBlock();
     		for (int i=0; i<sysex_cmd.length; i++) {
     			myBtMidi.getMidiOut().onRawByte(sysex_cmd[i]);
