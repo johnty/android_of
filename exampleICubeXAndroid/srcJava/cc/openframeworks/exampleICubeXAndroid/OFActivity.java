@@ -22,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 import cc.openframeworks.OFAndroid;
 import cc.openframeworks.exampleICubeXAndroid.R;
@@ -106,6 +107,10 @@ public class OFActivity extends cc.openframeworks.OFActivity{
         	post("MIDI not available!");
         	finish();
         }
+        
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        
+        
         mySysExDecoder = new SystemMessageDecoder(midiSysExReceiver);
 
 		//we send dummy data to make interface think sensor 0 is on:

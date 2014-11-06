@@ -17,7 +17,7 @@ local.properties
 !*.xml
 # android autogen resource bundle
 **/raw/
-
+*.class
 
 # External tool builders
 .externalToolBuilders/
