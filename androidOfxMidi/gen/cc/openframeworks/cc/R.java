@@ -8,13 +8,31 @@ package cc.openframeworks.cc;
 
 public final class R {
 	public static final class drawable {
-		public static final int icon = 0x7f020001;
+		public static final int din5 = 0x7f020000;
+		public static final int icon = 0x7f020002;
+	}
+	public static final class id {
+		public static final int paired_devices = 0x7f070001;
+		public static final int title_paired_devices = 0x7f070000;
 	}
 	public static final class layout {
-		public static final int main = 0x7f030000;
+		public static final int device_list = 0x7f030000;
+		public static final int device_name = 0x7f030001;
+		public static final int main = 0x7f030002;
 	}
 	public static final class string {
-		public static final int app_name = 0x7f040001;
-		public static final int hello = 0x7f040000;
+		public static final int app_name = 0x7f04000c;
+		public static final int hello = 0x7f04000b;
+		public static final int none_paired = 0x7f040001;
+		public static final int select_device = 0x7f040000;
+		public static final int title_no_paired_devices = 0x7f040003;
+		public static final int title_no_usb_devices_available = 0x7f040008;
+		public static final int title_no_usb_midi_input_available = 0x7f040009;
+		public static final int title_no_usb_midi_output_available = 0x7f04000a;
+		public static final int title_paired_devices = 0x7f040002;
+		public static final int title_select_bluetooth_device = 0x7f040004;
+		public static final int title_select_usb_midi_device = 0x7f040005;
+		public static final int title_select_usb_midi_input = 0x7f040006;
+		public static final int title_select_usb_midi_output = 0x7f040007;
 	}
 }

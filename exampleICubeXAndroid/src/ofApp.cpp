@@ -5,10 +5,10 @@ void ofApp::setup(){
 	output_msg = last_locked ="";
 	lockedout = false;
 
-	myVidPlayer1.loadMovie("hands.mp4");
+	myVidPlayer1.loadMovie("vid/video02.mp4");
 	myVidPlayer1.setLoopState(OF_LOOP_NORMAL);
 
-	myVidPlayer2.loadMovie("vid2.mp4");
+	myVidPlayer2.loadMovie("vid/video03.mp4");
 	myVidPlayer1.setLoopState(OF_LOOP_NORMAL);
 
 	myVidPlayer1.play();
@@ -63,7 +63,7 @@ void ofApp::update(){
 		last_locked = "locked@ " + ofToString(last_count);
 	}
 
-	output_msg = "jni calls = " + ofToString(last_count);
+	output_msg = "jni calls = " + ofToString(jni_count);
 	output_msg += ";   call period(ms) = " + ofToString(ofGetElapsedTimeMillis()/(float)last_count) + "\n data = ";
 
 	for (int i=0; i<data_len; i++) {
@@ -114,7 +114,10 @@ void ofApp::windowResized(int w, int h){
 
 //--------------------------------------------------------------
 void ofApp::touchDown(int x, int y, int id){
-	output_msg += ofToString(x)+":"+ofToString(y)+"\n";
+	//output_msg += ofToString(x)+":"+ofToString(y)+"\n";
+	//ofxAndroidMidiBridge::testTrigger();
+	myICube.setMode(false); //host mode
+	myICube.setStream(true, 7);
 }
 
 //--------------------------------------------------------------
@@ -129,7 +132,7 @@ void ofApp::touchUp(int x, int y, int id){
 
 //--------------------------------------------------------------
 void ofApp::touchDoubleTap(int x, int y, int id){
-
+	myICube.setStream(false, 7);
 }
 
 //--------------------------------------------------------------
@@ -185,9 +188,12 @@ void ofApp::cancelPressed(){
 void ofApp::onCustom() {
 	//output_msg+="onCustom\n";
 	jni_count++;
+	ofxAndroidMidiBridge::testTrigger();
+
 }
 
 void ofApp::onArray(char* data, int len) {
+
 	//output_msg+="onArray: size = " + ofToString(len)+ "\n"; // len = " + ofToString(len) + "\n";
 	//output_msg+="array contents = ";
 	data_len = len;
